@@ -71,6 +71,20 @@ export function setupUI(els, onDriverSelected, onSubmit) {
     tokenInput.addEventListener('change', () => localStorage.setItem('mapboxToken', tokenInput.value.trim()));
   }
 
+  // make labels float when inputs have content (fix overlapping placeholder/label)
+  const watchInputs = ['name','phone','email','pickup','destination','date'];
+  function updateFilled(el){
+    if (!el) return;
+    if (el.value && el.value.trim() !== '') el.classList.add('filled'); else el.classList.remove('filled');
+  }
+  watchInputs.forEach(id => {
+    const i = document.getElementById(id);
+    if (!i) return;
+    updateFilled(i);
+    i.addEventListener('input', () => updateFilled(i));
+    i.addEventListener('change', () => updateFilled(i));
+  });
+
   // submit
   els.form.addEventListener('submit', (e) => {
     e.preventDefault();
